@@ -1,0 +1,38 @@
+asyncapi: 2.0.0
+info:
+  title: Интернет-магазин
+  version: '1.0.0'
+defaultContentType: application/json
+
+channels:
+  orders/OrderConfirmed:
+    publish:
+      message:
+        tags:
+          - name: orders
+        name: order confirmed
+        title: Заказ подтвержден
+        payload:
+           type: object
+           properties:
+             user_id:
+               type: integer
+               description: Идентификатор пользователя
+             product_ids:
+               type: array
+               items:
+                 type: integer
+               description: Список идентификаторов продуктов
+             amount:
+               type: number
+               format: decimal
+               description: Сумма заказа
+             status:
+               type: string
+               enum: [NEW, IN_PROGRESS, COMPLETE]
+               description: Статус заказа
+           required:
+             - user_id
+             - product_ids
+             - amount
+             - status

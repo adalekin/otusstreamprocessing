@@ -46,11 +46,17 @@ sequenceDiagram
             OrderService -->> User: 200 OK
         deactivate OrderService
 
-            note right of MessageBroker: OrderConfirmed<br/>Contains a detailed information<br/>about an order.
+            note left of MessageBroker: OrderConfirmed
             MessageBroker -->> NotificationService: consume
         deactivate MessageBroker
 
         activate NotificationService
+            NotificationService ->> UserService: GET /users/{user_id}
+
+            activate UserService
+                UserService -->> NotificationService: 200 OK {user_detail}
+            deactivate UserService
+
             NotificationService ->> NotificationService: Send an email
         deactivate NotificationService
     end

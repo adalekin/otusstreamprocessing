@@ -105,25 +105,6 @@ paths:
               schema:
                 $ref: "#/components/schemas/OrderWithID"
 
-  /notification/:
-    post:
-      tags:
-        - notifications
-      summary: Отослать e-mail на почту
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Notification"
-        required: true
-      responses:
-        "201":
-          description: Задача на отправку уведомления создана
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/NotificationWithID"
-
 components:
   parameters:
     UserID:
@@ -319,32 +300,3 @@ components:
               type: string
               enum: [NEW, IN_PROGRESS, COMPLETE]
               description: Статус заказа
-
-    Notification:
-      type: object
-      required:
-        - email
-        - template_name
-        - context
-      properties:
-        email:
-          type: string
-          format: email
-          description: E-mail
-        template_name:
-          type: string
-          description: Идентификатор шаблона
-        context:
-          type: object
-          description: Параметры шаблона
-
-    NotificationWithID:
-      allOf:
-        - $ref: "#/components/schemas/Notification"
-        - type: object
-          required:
-            - id
-          properties:
-            id:
-              type: string
-              description: Идентификатор уведомления

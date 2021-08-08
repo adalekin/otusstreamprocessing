@@ -4,7 +4,7 @@
 
 ## HTTP взаимодействие
 
-[Описание REST интерфейсов](http://petstore.swagger.io/?url=https%3A%2F%2Fraw.githubusercontent.com%2Fadalekin%2Fotusstreamprocessing%2Fmaster%2Fdoc%2Fhttp-communication%2Frest-openapi.yaml)
+[Описание REST интерфейсов](http://petstore.swagger.io/?url=https://raw.githubusercontent.com/adalekin/otusstreamprocessing/master/doc/http-communication/rest-openapi.yaml)
 
 Преимущества:
 * Простота реализации.
@@ -17,11 +17,16 @@
 
 ## Событийное взаимодействие с использование брокера сообщений для нотификаций (уведомлений)
 
+[Описание REST интерфейсов](http://petstore.swagger.io/?url=https://raw.githubusercontent.com/adalekin/otusstreamprocessing/master/doc/http-communication/rest-openapi.yaml)
+
+[Описание ASYNC интерфейсов](./doc/mb-communication/notification-asyncapi.yaml)
+
 Преимущества:
 * Простота реализации.
 
 Недостатки:
-* Избыточные данные в payload сообщений или избыточные запросы `Notification Service` к другим сервисам.
+* Повышенная нагрузка на чтение данных из других сервисов.
+* `Notification Service` перегружен коммуникациями. Со временем это скажется на его производительности и расширяемости.
 
 <img src="./doc/mb-notifications/sequence-diagram.svg" width="100%">
 
