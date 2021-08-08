@@ -1,0 +1,51 @@
+sequenceDiagram
+    participant User
+    participant UserService as User Service
+    participant BillingService as Billing Service
+    participant OrderService as Order Service
+    participant NotificationService as Notification Service
+
+    rect rgba(0, 255, 0, .1)
+        note right of User: Registre a user
+        User ->> UserService: POST /register/
+
+        activate UserService
+            UserService ->> BillingService: POST /account/
+
+            activate BillingService
+                BillingService -->> UserService: 201 CREATED {account_id}
+            deactivate BillingService
+
+            UserService ->> User: 201 CREATED
+        deactivate UserService
+    end
+
+    rect rgba(0, 255, 0, .1)
+        note right of User: Charge a user account
+        User ->> BillingService: POST /transaction/
+
+        activate BillingService
+            BillingService -->> User: 200 OK
+        deactivate BillingService
+    end
+
+    rect rgba(0, 255, 0, .1)
+        note right of User: Create an order
+        User ->> OrderService: POST /order/
+
+        activate OrderService
+            OrderService ->> BillingService: POST /transaction/
+
+            activate BillingService
+                BillingService -->> OrderService: 200 OK
+            deactivate BillingService
+
+            OrderService ->> NotificationService: POST /notification/
+            activate NotificationService
+                NotificationService ->> NotificationService: Send an email
+                OrderService -->> NotificationService: 200 OK
+            deactivate NotificationService
+
+            OrderService -->> User: 200 OK
+        deactivate OrderService
+    end

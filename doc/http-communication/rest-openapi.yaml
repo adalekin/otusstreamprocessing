@@ -1,0 +1,342 @@
+openapi: 3.0.0
+info:
+  contact:
+    email: adalekin@gmail.com
+  title: Интернет-магазин
+  version: 1.0.0
+tags:
+  - name: users
+    description: Сервис работы с пользователем
+  - name: billing
+    description: Сервис платежей
+  - name: orders
+    description: Сервис заказов
+  - name: notifications
+    description: Сервис нотификаций
+paths:
+  /register/:
+    post:
+      tags:
+        - users
+      summary: Регистрация пользователя
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterUser"
+        required: true
+      responses:
+        "201":
+          description: Регистрация прошла успешно
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RegisterUserWithID"
+
+  /user/{user_id}/:
+    get:
+      tags:
+        - users
+      summary: Получить пользователя по ID
+      parameters:
+        - $ref: "#/components/parameters/UserID"
+      responses:
+        "200":
+          description: Успешный запрос
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserWithID"
+
+  /account/:
+    post:
+      tags:
+        - billing
+      summary: Создать аккаунт пользователя
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Account"
+        required: true
+      responses:
+        "201":
+          description: Аккаунт успешно создан
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AccountWithID"
+
+  /transaction/:
+    post:
+      tags:
+        - billing
+      summary: Создать транзакцию
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Transaction"
+        required: true
+      responses:
+        "201":
+          description: Задача на отправку уведомления создана
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TransactionWithID"
+
+  /order/:
+    post:
+      tags:
+        - orders
+      summary: Создать заказ
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Order"
+        required: true
+      responses:
+        "201":
+          description: Заказ успешно размещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrderWithID"
+
+  /notification/:
+    post:
+      tags:
+        - notifications
+      summary: Отослать e-mail на почту
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Notification"
+        required: true
+      responses:
+        "201":
+          description: Задача на отправку уведомления создана
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotificationWithID"
+
+components:
+  parameters:
+    UserID:
+      in: path
+      name: user_id
+      required: true
+      description: Идентификатор пользователя
+      schema:
+        type: string
+
+  schemas:
+    User:
+      type: object
+      required:
+        - email
+      properties:
+        email:
+          type: string
+          format: email
+          description: E-mail
+        phone:
+          type: string
+          description: Телефон
+          example: "12345678901"
+          x-nullable: true
+        first_name:
+          type: string
+          description: Имя
+          example: Chin
+          x-nullable: true
+        last_name:
+          type: string
+          description: Фамилия
+          example: Sang
+          x-nullable: true
+
+    UserWithID:
+      allOf:
+        - $ref: "#/components/schemas/User"
+        - type: object
+          required:
+            - id
+            - email
+            - phone
+            - first_name
+            - last_name
+            - is_active
+            - last_login
+            - updated_at
+            - created_at
+          properties:
+            id:
+              type: integer
+              description: Идентификатор пользователя
+            is_active:
+              type: boolean
+              description: Флаг, которые определяет, активен ли пользователь.
+            last_login:
+              type: string
+              format: date-time
+              description: Дата последнего входа в систему
+            updated_at:
+              type: string
+              format: date-time
+              description: Дата последнего обновления данных пользователя
+            created_at:
+              type: string
+              format: date-time
+              description: Дата регистрации пользователя
+
+    RegisterUser:
+      allOf:
+        - $ref: "#/components/schemas/User"
+        - type: object
+          required:
+            - email
+          properties:
+            password:
+              type: string
+              description: Пароль
+              x-nullable: true
+
+    RegisterUserWithID:
+      allOf:
+        - $ref: "#/components/schemas/UserWithID"
+        - type: object
+          required:
+            - id
+            - email
+            - phone
+            - first_name
+            - last_name
+            - is_active
+            - last_login
+            - updated_at
+            - created_at
+            - access_token
+          properties:
+            access_token:
+              type: string
+              description: Токен JWT
+    Account:
+      type: object
+      required:
+        - user_id
+      properties:
+        user_id:
+          type: string
+          description: Идентификатор пользователя
+
+    AccountWithID:
+      allOf:
+        - $ref: "#/components/schemas/Account"
+        - type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+              description: Идентификатор аккаунта
+            balance:
+              type: number
+              format: decimal
+              description: Баланс аккаунта
+
+    Transaction:
+      type: object
+      required:
+        - account_id
+      properties:
+        account_id:
+          type: integer
+          description: Идентификатор аккаунта
+        type:
+          type: string
+          enum: [DEBIT, CREDIT]
+          description: Тип транзакции
+        amount:
+          type: number
+          format: decimal
+          description: Размер транзакции
+
+    TransactionWithID:
+      allOf:
+        - $ref: "#/components/schemas/Transaction"
+        - type: object
+          required:
+            - id
+          properties:
+            id:
+              type: integer
+              description: Идентификатор транзакции
+            status:
+              type: string
+              enum: [NEW, IN_PROGRESS, COMPLETE]
+              description: Статус транзакции
+
+    Order:
+      type: object
+      required:
+        - user_id
+      properties:
+        user_id:
+          type: integer
+          description: Идентификатор пользователя
+        product_id:
+          type: integer
+          description: Идентификатор продукта
+
+    OrderWithID:
+      allOf:
+        - $ref: "#/components/schemas/Order"
+        - type: object
+          required:
+            - id
+          properties:
+            id:
+              type: integer
+              description: Идентификатор заказа
+            amount:
+              type: number
+              format: decimal
+              description: Стоимость продукта
+            status:
+              type: string
+              enum: [NEW, IN_PROGRESS, COMPLETE]
+              description: Статус заказа
+
+    Notification:
+      type: object
+      required:
+        - email
+        - template_name
+        - context
+      properties:
+        email:
+          type: string
+          format: email
+          description: E-mail
+        template_name:
+          type: string
+          description: Идентификатор шаблона
+        context:
+          type: object
+          description: Параметры шаблона
+
+    NotificationWithID:
+      allOf:
+        - $ref: "#/components/schemas/Notification"
+        - type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+              description: Идентификатор уведомления
