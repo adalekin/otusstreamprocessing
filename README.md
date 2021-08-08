@@ -19,7 +19,7 @@
 
 [Описание REST интерфейсов](http://petstore.swagger.io/?url=https://raw.githubusercontent.com/adalekin/otusstreamprocessing/master/doc/http-communication/rest-openapi.yaml)
 
-[Описание ASYNC интерфейсов](./doc/mb-communication/notification-asyncapi.yaml)
+[Описание ASYNC интерфейсов](./doc/mb-notifications/notification-asyncapi.yaml)
 
 Преимущества:
 * Простота реализации.
