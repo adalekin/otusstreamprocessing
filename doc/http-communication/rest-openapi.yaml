@@ -200,11 +200,11 @@ components:
         - type: object
           required:
             - email
+            - password
           properties:
             password:
               type: string
               description: Пароль
-              x-nullable: true
 
     RegisterUserWithID:
       allOf:

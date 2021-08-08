@@ -1,0 +1,251 @@
+asyncapi: 2.0.0
+info:
+  title: Интернет-магазин
+  version: "1.0.0"
+defaultContentType: application/json
+
+channels:
+  gateway/RegistrationRequested:
+    publish:
+      message:
+        tags:
+          - name: users
+        name: registration requested
+        title: Пользователь запросил регистрацию
+        payload:
+          type: object
+          required:
+            - email
+            - password
+          properties:
+            email:
+              type: string
+              format: email
+              description: E-mail
+            password:
+              type: string
+              description: Пароль
+            phone:
+              type: string
+              description: Телефон
+              example: "12345678901"
+            first_name:
+              type: string
+              description: Имя
+              example: Chin
+            last_name:
+              type: string
+              description: Фамилия
+              example: Sang
+
+  users/UserCreated:
+    publish:
+      message:
+        tags:
+          - name: users
+        name: user created
+        title: Пользователь создан
+        payload:
+          type: object
+          properties:
+            id:
+              type: integer
+              description: Идентификатор пользователя
+            email:
+              type: string
+              format: email
+              description: E-mail
+            phone:
+              type: string
+              description: Телефон
+              example: "12345678901"
+            first_name:
+              type: string
+              description: Имя
+              example: Chin
+            last_name:
+              type: string
+              description: Фамилия
+              example: Sang
+            is_active:
+              type: boolean
+              description: Флаг, которые определяет, активен ли пользователь.
+            last_login:
+              type: string
+              format: date-time
+              description: Дата последнего входа в систему
+            updated_at:
+              type: string
+              format: date-time
+              description: Дата последнего обновления данных пользователя
+            created_at:
+              type: string
+              format: date-time
+              description: Дата регистрации пользователя
+            access_token:
+              type: string
+              description: Токен JWT
+
+  billing/AccountCreated:
+    publish:
+      message:
+        tags:
+          - name: billing
+        name: account created
+        title: Аккаунт создан
+        payload:
+          type: object
+          properties:
+            id:
+              type: string
+              description: Идентификатор аккаунта
+            user_id:
+              type: string
+              description: Идентификатор пользователя
+            balance:
+              type: number
+              format: decimal
+              description: Баланс аккаунта
+
+  billing/TransactionRequested:
+    publish:
+      message:
+        tags:
+          - name: billing
+        name: transaction requested
+        title: Запрос на создание транзакции
+        payload:
+          type: object
+          properties:
+            account_id:
+              type: integer
+              description: Идентификатор аккаунта
+            type:
+              type: string
+              enum: [DEBIT, CREDIT]
+              description: Тип транзакции
+            amount:
+              type: number
+              format: decimal
+              description: Размер транзакции
+            extra:
+              type: object
+              description: Дополнительные параметры
+
+  billing/TransactionCompleted:
+    publish:
+      message:
+        tags:
+          - name: billing
+        name: transaction requested
+        title: Запрос на создание транзакции
+        payload:
+          type: object
+          properties:
+            id:
+              type: integer
+              description: Идентификатор транзакции
+            account_id:
+              type: integer
+              description: Идентификатор аккаунта
+            type:
+              type: string
+              enum: [DEBIT, CREDIT]
+              description: Тип транзакции
+            amount:
+              type: number
+              format: decimal
+              description: Размер транзакции
+            extra:
+              type: object
+              description: Дополнительные параметры
+            status:
+              type: string
+              enum: [NEW, IN_PROGRESS, COMPLETE]
+              description: Статус транзакции
+
+  orders/OrderRequested:
+    publish:
+      message:
+        tags:
+          - name: orders
+        name: order confirmed
+        title: Заказ подтвержден
+        payload:
+          type: object
+          properties:
+            user_id:
+              type: integer
+              description: Идентификатор пользователя
+            product_ids:
+              type: array
+              items:
+                type: integer
+              description: Список идентификаторов продуктов
+          required:
+            - user_id
+            - product_ids
+
+  orders/OrderCreated:
+    publish:
+      message:
+        tags:
+          - name: orders
+        name: order confirmed
+        title: Заказ подтвержден
+        payload:
+          type: object
+          properties:
+            user_id:
+              type: integer
+              description: Идентификатор пользователя
+            product_ids:
+              type: array
+              items:
+                type: integer
+              description: Список идентификаторов продуктов
+            amount:
+              type: number
+              format: decimal
+              description: Сумма заказа
+            status:
+              type: string
+              enum: [NEW, IN_PROGRESS, COMPLETE]
+              description: Статус заказа
+          required:
+            - user_id
+            - product_ids
+            - amount
+            - status
+
+  orders/OrderConfirmed:
+    publish:
+      message:
+        tags:
+          - name: orders
+        name: order confirmed
+        title: Заказ подтвержден
+        payload:
+          type: object
+          properties:
+            user_id:
+              type: integer
+              description: Идентификатор пользователя
+            product_ids:
+              type: array
+              items:
+                type: integer
+              description: Список идентификаторов продуктов
+            amount:
+              type: number
+              format: decimal
+              description: Сумма заказа
+            status:
+              type: string
+              enum: [NEW, IN_PROGRESS, COMPLETE]
+              description: Статус заказа
+          required:
+            - user_id
+            - product_ids
+            - amount
+            - status

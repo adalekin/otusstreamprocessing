@@ -19,7 +19,7 @@
 
 [Описание REST интерфейсов](http://petstore.swagger.io/?url=https://raw.githubusercontent.com/adalekin/otusstreamprocessing/master/doc/http-communication/rest-openapi.yaml)
 
-[Описание ASYNC интерфейсов](./doc/mb-notifications/notification-asyncapi.yaml)
+[Описание ASYNC интерфейсов](./doc/mb-notifications/asyncapi.yaml)
 
 Преимущества:
 * Простота реализации.
@@ -31,6 +31,8 @@
 <img src="./doc/mb-notifications/sequence-diagram.svg" width="100%">
 
 ## Event Collaboration cтиль взаимодействия с использованием брокера сообщений
+
+[Описание ASYNC интерфейсов](./doc/event-collaboration/asyncapi.yaml)
 
 Преимущества:
 * Гибкое решение, которое позволит относительно легко вносить изменения в логику работы системы.
