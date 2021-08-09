@@ -2,6 +2,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: {{ include "users.fullname" . }}-migrations
+  namespace: {{ .Release.Namespace }}
   labels:
     {{- include "users.labels" . | nindent 4 }}
 spec:
@@ -24,7 +25,7 @@ spec:
                 name: affo-config
           env:
             - name: AUTH_URL
-              value: http://affo-auth.default.svc.cluster.local
+              value: http://affo-auth.{{ .Release.Namespace }}.svc.cluster.local
             - name: FLASK_APP
               value: users.wsgi
           {{- if .Values.global.postgresql.existingSecret }}

@@ -1,12 +1,15 @@
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
-  name: affo-users
+  name: {{ include "affo.fullname" . }}-users
+  namespace: {{ include "affo.namespace" . }}
+  labels:
+    {{- include "affo.labels" . | nindent 4 }}
 spec:
   hosts:
   - arch.homework
   gateways:
-  - gateway
+  - {{ include "affo.fullname" . }}-gateway
   http:
   - match:
     - uri:
@@ -21,4 +24,4 @@ spec:
     - destination:
         port:
           number: 80
-        host: affo-users
+        host: {{ include "affo.fullname" . }}-users

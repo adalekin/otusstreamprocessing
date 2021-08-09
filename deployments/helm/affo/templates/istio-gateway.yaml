@@ -1,7 +1,10 @@
 apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
-  name: gateway
+  name: {{ include "affo.fullname" . }}-gateway
+  namespace: {{ include "affo.namespace" . }}
+  labels:
+    {{- include "affo.labels" . | nindent 4 }}
 spec:
   selector:
     istio: ingressgateway

@@ -26,3 +26,9 @@ vendor/
 
 # IDE
 .vscode
+
+# Istio
+dist/istio-*
+
+# Helm charts
+*.tgz
