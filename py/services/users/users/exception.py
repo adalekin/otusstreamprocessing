@@ -2,26 +2,12 @@ import http
 
 import connexion_buzz
 
-import flask
-
 
 class NoSuchUser(connexion_buzz.ConnexionBuzz):
     status_code = http.HTTPStatus.BAD_REQUEST
 
 
-class InvalidToken(connexion_buzz.ConnexionBuzz):
-    status_code = http.HTTPStatus.BAD_REQUEST
-
-
-class InvalidPhoneCode(connexion_buzz.ConnexionBuzz):
-    status_code = http.HTTPStatus.BAD_REQUEST
-
-
 class AlreadyExists(connexion_buzz.ConnexionBuzz):
-    status_code = http.HTTPStatus.BAD_REQUEST
-
-
-class InvalidPhone(connexion_buzz.ConnexionBuzz):
     status_code = http.HTTPStatus.BAD_REQUEST
 
 

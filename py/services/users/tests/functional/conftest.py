@@ -2,10 +2,8 @@ import base64
 import json
 import uuid
 
-from hamcrest import *
-
 import pytest
-
+from hamcrest import assert_that
 from pytest_toolbelt import matchers
 
 from users import settings
@@ -15,10 +13,14 @@ from users import settings
 def user_access_token():
     return "123"
 
+@pytest.fixture()
+def account_id():
+    return "123"
 
 @pytest.fixture()
-def user(client, requests_mock, user_access_token):
+def user(client, requests_mock, user_access_token, account_id):
     requests_mock.post(settings.AUTH_URL + "/jwt/encode/", json={"access_token": user_access_token})
+    requests_mock.post(settings.BILLING_URL + "/accounts/", json={"id": account_id})
 
     password = "1234567890"
 

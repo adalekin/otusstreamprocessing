@@ -61,7 +61,47 @@ paths:
               schema:
                 $ref: "#/components/schemas/RegisterUserWithID"
 
-  /user/{user_id}/:
+  /user/:
+    get:
+      tags:
+        - user
+      summary: Retrieves a current user.
+      operationId: users.api.user.get_current
+      parameters:
+        - $ref: "#/components/parameters/Authorization"
+        - $ref: "#/components/parameters/JWTPayload"
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserWithID"
+    patch:
+      tags:
+        - user
+      summary: Update a user by an identifier
+      operationId: users.api.user.update_current
+      parameters:
+        - $ref: "#/components/parameters/Authorization"
+        - $ref: "#/components/parameters/JWTPayload"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              x-body-name: user1
+              $ref: "#/components/schemas/UpdateUser"
+        description: The user to update
+        required: true
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserWithID"
+
+  /users/{user_id}/:
     get:
       tags:
         - user
@@ -69,8 +109,6 @@ paths:
       operationId: users.api.user.get
       parameters:
         - $ref: "#/components/parameters/UserID"
-        - $ref: "#/components/parameters/Authorization"
-        - $ref: "#/components/parameters/JWTPayload"
       responses:
         "200":
           description: Success
@@ -85,8 +123,6 @@ paths:
       operationId: users.api.user.update
       parameters:
         - $ref: "#/components/parameters/UserID"
-        - $ref: "#/components/parameters/Authorization"
-        - $ref: "#/components/parameters/JWTPayload"
       requestBody:
         content:
           application/json:

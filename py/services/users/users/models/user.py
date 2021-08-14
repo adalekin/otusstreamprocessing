@@ -1,10 +1,8 @@
 import datetime
 
-from sqlalchemy_utils.types.scalar_list import ScalarListType
-
 from werkzeug.security import check_password_hash
 
-from users.extensions import db, ma
+from users.extensions import db, marshmallow
 
 __all__ = ["User"]
 
@@ -25,15 +23,13 @@ class User(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 
     def __repr__(self):
-        return f"<User {self.username}>"
+        return f"<User {self.id}>"
 
     def verify_password(self, password):
         return check_password_hash(self.password, password)
 
 
-class UserSchema(ma.ModelSchema):
-    roles = ma.List(ma.String())
-
+class UserSchema(marshmallow.SQLAlchemyAutoSchema):
     class Meta:
         model = User
         exclude = ("password",)
