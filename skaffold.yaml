@@ -8,8 +8,20 @@ build:
       context: py/services/auth
       docker: {}
     - image: affoio/users
-      context: py/services/users
+      context: py/
+      docker:
+        dockerfile: services/users/Dockerfile
+    - image: affoio/billing
+      context: py/services/billing
       docker: {}
+    - image: affoio/orders
+      context: py/
+      docker:
+        dockerfile: services/orders/Dockerfile
+    - image: affoio/notifications
+      context: py/
+      docker:
+        dockerfile: services/notifications/Dockerfile
 deploy:
   helm:
     releases:

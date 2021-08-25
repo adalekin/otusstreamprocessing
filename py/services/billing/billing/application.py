@@ -39,7 +39,7 @@ def create_app(settings_override=None):
     # Flask-SQLAlchemy must be initialized before Flask-Marshmallow.
     db.init_app(application)
     marshmallow.init_app(application)
-    migrate.init_app(application, db)
+    migrate.init_app(application, db, version_table="billing-versions")
 
     sentry_sdk.init(integrations=[FlaskIntegration()], **application.config.get("SENTRY_CONFIG", {}))
 

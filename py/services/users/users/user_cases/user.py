@@ -5,12 +5,12 @@ from users.extensions import db
 from users.models.user import User
 from users.sagas.auth import IssueAccessToken
 from users.sagas.billing import CreateAccount
-from users.sagas.user import CreateUser
+from users.sagas.user import CreateUser, SendUserRegistered
 
 
 def register_user_use_case(email, first_name, last_name, phone=None, password=None):
     state = run_transaction(
-        steps=[CreateUser(), CreateAccount(), IssueAccessToken()],
+        steps=[CreateUser(), CreateAccount(), IssueAccessToken(), SendUserRegistered()],
         starting_state={
             "email": email,
             "phone": phone,

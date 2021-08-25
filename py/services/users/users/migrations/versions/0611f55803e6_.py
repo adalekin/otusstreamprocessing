@@ -8,8 +8,6 @@ Create Date: 2019-05-20 12:33:43.261414
 from alembic import op
 import sqlalchemy as sa
 
-import sqlalchemy_utils
-
 
 # revision identifiers, used by Alembic.
 revision = '0611f55803e6'
@@ -29,7 +27,6 @@ def upgrade():
     sa.Column('password', sa.String(length=256), nullable=True),
     sa.Column('is_active', sa.Boolean(), nullable=True),
     sa.Column('last_login', sa.DateTime(), nullable=True),
-    sa.Column('roles', sqlalchemy_utils.types.scalar_list.ScalarListType(), nullable=True),
     sa.Column('updated_at', sa.DateTime(), nullable=True),
     sa.Column('created_at', sa.DateTime(), nullable=True),
     sa.PrimaryKeyConstraint('id')

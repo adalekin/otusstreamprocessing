@@ -1,16 +1,13 @@
 import os
 
+from flask_kafka import Kafka
 from flask_marshmallow import Marshmallow
-
 from flask_migrate import Migrate
-
 from flask_sqlalchemy import SQLAlchemy
 
-from . import settings
-
-__all__ = ["db", "ma", "migrate"]
-
 db = SQLAlchemy(session_options={"autocommit": True})
+
+kafka = Kafka()
 
 marshmallow = Marshmallow()
 

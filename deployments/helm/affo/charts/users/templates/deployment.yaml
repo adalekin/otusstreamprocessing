@@ -50,6 +50,10 @@ spec:
           env:
             - name: AUTH_URL
               value: http://affo-auth.{{ .Release.Namespace }}.svc.cluster.local
+            - name: BILLING_URL
+              value: http://affo-billing.{{ .Release.Namespace }}.svc.cluster.local
+            - name: KAFKA_BOOTSTRAP_SERVERS
+              value: http://affo-kafka.{{ .Release.Namespace }}.svc.cluster.local
           {{- if .Values.global.postgresql.existingSecret }}
             - name: DB_PASSWORD
               valueFrom:

@@ -3,8 +3,9 @@ from talepy.steps import Step
 from werkzeug.security import generate_password_hash
 
 from users.exception import AlreadyExists
-from users.extensions import db
+from users.extensions import db, kafka
 from users.models.user import User
+from schemas.user import UserRegistered
 
 
 class CreateUser(Step):
@@ -38,3 +39,14 @@ class CreateUser(Step):
     def compensate(self, state):
         with db.session.begin(subtransactions=True):
             db.session.delete(state["user"])
+
+
+class SendUserRegistered(Step):
+    def execute(self, state):
+        user_registered = UserRegistered(user_id=state["user"].id)
+
+        kafka.send("user-registered", user_registered.serialize())
+        return state
+
+    def compensate(self, state):
+        pass
