@@ -1,11 +1,11 @@
 [tool.poetry]
-name = "orders"
+name = "billing"
 version = "0.1.0"
 description = ""
 authors = ["Aleksey Dalekin <adalekin@gmail.com>"]
 
 [tool.poetry.dependencies]
-python = "^3.7.9"
+python = "^3.7"
 connexion-buzz = "0.2.1"
 connexion = "2.9.0"
 environs = "9.3.2"
@@ -19,9 +19,6 @@ marshmallow = "3.13.0"
 psycopg2 = "2.9.1"
 sentry-sdk = {version = "0.7.10", extras = ["flask"]}
 SQLAlchemy = "1.4.22"
-talepy = "0.8.0"
-flask-kafka = {path = "../../lib/flask-kafka"}
-schemas = {path = "../../lib/schemas"}
 
 [tool.poetry.dev-dependencies]
 coverage = "4.5.1"

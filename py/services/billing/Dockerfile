@@ -1,38 +1,61 @@
-FROM python:3.6-alpine3.9 as base
+FROM python:3.7.9-alpine3.13 as base
+
+# Keeps Python from generating .pyc files in the container
+ENV PYTHONDONTWRITEBYTECODE 1
+# Turns off buffering for easier container logging
+ENV PYTHONUNBUFFERED 1
+# A service name to provide common Docker experiance
+ENV SERVICE_NAME=billing
+ENV SERVICE_PATH=/code/services/${SERVICE_NAME}/
+ENV VENV_PATH=${SERVICE_PATH}/.venv
+ENV PATH="$VENV_PATH/bin:$PATH"
+
 FROM base as builder
+# Use a stable Poetry version
+ENV POETRY_VERSION=1.1.8 \
+    POETRY_HOME="/opt/poetry" \
+    POETRY_NO_INTERACTION=1 \
+    POETRY_VIRTUALENVS_IN_PROJECT=true
+ENV PATH="$POETRY_HOME/bin:$PATH"
+
+WORKDIR $SERVICE_PATH
 
 RUN mkdir /install
-WORKDIR /install
 
-# Install dependencies
-RUN apk add --no-cache  \
-        gcc \
-        g++ \
-        libc-dev \
-        libffi-dev \
-        linux-headers \
-        musl-dev \
-        postgresql-dev
+# Installing required packages
+RUN apk add --no-cache \
+    curl \
+    gcc \
+    g++ \
+    libc-dev \
+    libffi-dev \
+    linux-headers \
+    openssl-dev \
+    postgresql-dev
 
-RUN pip install --upgrade pip
+# Installing Poetry
+RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
 
-COPY requirements.txt /tmp/
+# Copy dependency sources
+COPY services/${SERVICE_NAME}/poetry.lock services/${SERVICE_NAME}/pyproject.toml /code/services/${SERVICE_NAME}/
+COPY lib/ /code/lib/
 
-RUN pip wheel --wheel-dir=/tmp/wheelhouse -r /tmp/requirements.txt
-RUN pip install --prefix=/install -r /tmp/requirements.txt --no-index --find-links=/tmp/wheelhouse --no-warn-script-location
+# Installing service dependencies
+RUN poetry install --no-root --no-dev
 
 FROM base
+WORKDIR ${SERVICE_PATH}
 
-# Install dependencies
+# Installing required packages
 RUN apk add --no-cache \
-        bash \
-        libssl1.1 \
-        netcat-openbsd \
-        postgresql-libs
+    bash \
+    libssl1.1 \
+    netcat-openbsd \
+    postgresql-libs
 
-COPY --from=builder /install /usr/local
-COPY . /code/
+COPY services/${SERVICE_NAME}/ ${SERVICE_PATH}
+COPY --from=builder $VENV_PATH $VENV_PATH
 
-WORKDIR /code/
+RUN python -m venv $VENV_PATH
 
 CMD ["gunicorn", "billing.wsgi:app", "-b", ":8000"]

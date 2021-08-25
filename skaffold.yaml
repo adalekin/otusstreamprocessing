@@ -5,15 +5,17 @@ build:
     sha256: {}
   artifacts:
     - image: affoio/auth
-      context: py/services/auth
-      docker: {}
+      context: py/
+      docker:
+        dockerfile: services/auth/Dockerfile
     - image: affoio/users
       context: py/
       docker:
         dockerfile: services/users/Dockerfile
     - image: affoio/billing
-      context: py/services/billing
-      docker: {}
+      context: py/
+      docker:
+        dockerfile: services/billing/Dockerfile
     - image: affoio/orders
       context: py/
       docker:

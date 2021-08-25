@@ -4,10 +4,10 @@ from dataclasses_avroschema import AvroModel
 
 
 @dataclass
-class OrderConfirmed(AvroModel):
-    "An OrderConfirmed event"
+class OrderCompleted(AvroModel):
+    "An OrderCompleted event"
     order_id: int
 
     class Meta:
-        namespace = "OrderConfirmed.v1"
-        aliases = ["order-confirmed-v1"]
+        namespace = "OrderCompleted.v1"
+        aliases = ["order-completed-v1"]

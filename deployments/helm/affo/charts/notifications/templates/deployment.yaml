@@ -44,7 +44,7 @@ spec:
             - name: USERS_URL
               value: http://affo-users.{{ .Release.Namespace }}.svc.cluster.local
             - name: KAFKA_BOOTSTRAP_SERVERS
-              value: http://affo-kafka.{{ .Release.Namespace }}.svc.cluster.local
+              value: "affo-kafka.{{ .Release.Namespace }}.svc.cluster.local:9092"
           {{- if .Values.global.postgresql.existingSecret }}
             - name: DB_PASSWORD
               valueFrom:

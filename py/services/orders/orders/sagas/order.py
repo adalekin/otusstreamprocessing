@@ -1,6 +1,7 @@
+from schemas.order import OrderCompleted
 from talepy.steps import Step
 
-from orders.extensions import db
+from orders.extensions import db, kafka
 from orders.models.order import Order, OrderItem, OrderStatus
 
 
@@ -27,6 +28,17 @@ class CompleteOrder(Step):
         with db.session.begin(subtransactions=True):
             state["order"].status = OrderStatus.complete
             db.session.add(state["order"])
+        return state
+
+    def compensate(self, state):
+        pass
+
+
+class SendOrderCompleted(Step):
+    def execute(self, state):
+        order_completed = OrderCompleted(order_id=state["order"].id)
+
+        kafka.send("order-completed", order_completed.serialize())
         return state
 
     def compensate(self, state):
